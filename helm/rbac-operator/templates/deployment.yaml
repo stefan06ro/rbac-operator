@@ -21,7 +21,7 @@ spec:
         app: {{ .Values.project.name }}
         version: {{ .Values.project.version }}
       annotations:
-        releaseRevision: {{ $.Release.Revision | quote }}
+        releaseRevision: {{ .Release.Revision | quote }}
     spec:
       affinity:
         podAntiAffinity:

@@ -38,7 +38,10 @@ func NewOrgPermissions(config OrgPermissionsConfig) (*OrgPermissions, error) {
 	var organizationPermissionsController *controller.Controller
 	{
 		selector := controller.NewSelector(func(labels controller.Labels) bool {
-			return !(labels.Has(label.App) || labels.Has(label.LegacyApp) || labels.Has(label.ManagedByHelm))
+			if labels.Has(label.App) || labels.Has(label.LegacyApp) || labels.Has(label.ManagedByHelm) {
+				return false
+			}
+			return true
 		})
 
 		c := controller.Config{

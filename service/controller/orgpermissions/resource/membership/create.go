@@ -23,6 +23,8 @@ func (r *Resource) EnsureCreated(ctx context.Context, obj interface{}) error {
 		return microerror.Mask(err)
 	}
 
+	r.logger.LogCtx(ctx, "level", "findme", "message", fmt.Sprintf("reconciled %s", roleBinding.Name))
+
 	if !pkgkey.IsOrgNamespace(roleBinding.Namespace) || !isTargetRoleBinding(roleBinding) {
 		return nil
 	}

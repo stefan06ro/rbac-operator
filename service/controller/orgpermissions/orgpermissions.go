@@ -7,7 +7,6 @@ import (
 	"github.com/giantswarm/operatorkit/v2/pkg/controller"
 	"github.com/giantswarm/operatorkit/v2/pkg/resource"
 	rbacv1 "k8s.io/api/rbac/v1"
-	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/runtime"
 
 	"github.com/giantswarm/rbac-operator/pkg/label"
@@ -38,10 +37,12 @@ func NewOrgPermissions(config OrgPermissionsConfig) (*OrgPermissions, error) {
 
 	var organizationPermissionsController *controller.Controller
 	{
-		selector, err := labels.Parse(label.NotManagedByHelm)
-		if err != nil {
-			return nil, microerror.Mask(err)
-		}
+		selector := controller.NewSelector(func(labels controller.Labels) bool {
+			if labels.Has(label.App) || labels.Has(label.LegacyApp) || labels.Has(label.ManagedByHelm) {
+				return false
+			}
+			return true
+		})
 
 		c := controller.Config{
 			K8sClient: config.K8sClient,

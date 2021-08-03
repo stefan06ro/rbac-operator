@@ -10,7 +10,5 @@ const (
 )
 
 const (
-	LegacyApp     = "app"
-	App           = "app.kubernetes.io/name"
-	ManagedByHelm = "app.kubernetes.io/managed-by"
+	NotManagedByHelm = "app.kubernetes.io/managed-by!=Helm"
 )
